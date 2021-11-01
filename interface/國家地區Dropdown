@@ -1,0 +1,63 @@
+#國家地區Dropdown
+
+from tkinter import *
+import re
+
+# 建立主視窗
+mainWin = Tk()
+var = StringVar()
+
+# 視窗標題、大小
+mainWin.title("國家地區")
+mainWin.geometry("480x140")
+
+#關鍵變數名稱
+SelectedCountry = '' #所選國家
+SelectedCity = '' #所選城市
+
+
+# 選單事件處理函式(選國家)
+def countryCommand(CountryName):
+    i = country.index(CountryName)
+    cityList = SecondOption[i][:]
+    CityDrop['menu'].delete(0, 'end')
+    for choice in cityList:
+        CityDrop['menu'].add_command(label=choice, command = lambda value=choice: AssignCity(value))
+    CityOption.set('請選擇城市')
+    
+# 選單事件處理函式(選城市)
+def cityCommand(CityName):
+    for cityList in SecondOption:
+        if CityName in cityList:
+            choiceCountry = cityList
+    CountryString = country[SecondOption.index(choiceCountry)]
+    CountryOption.set(CountryString)
+    AssignCity(CityName)
+    
+
+# 儲存國家
+def AssignCountry(CountryName):
+    SelectedCountry = CountryName
+    CountryOption.set(Country)
+    
+# 儲存城市
+def AssignCity(CityName):
+    SelectedCity = CityName
+    CityOption.set(CityName)
+
+#建立下拉式選單
+country = ['日本','泰國','韓國', '香港','新加坡']
+CountryOption = StringVar()
+CountryOption.set('請選擇國家')
+SecondOption = [['東京','大阪京都','北海道', '沖繩'], ['曼谷', '芭達雅', '普吉島'], ['首爾', '釜山'], ['香港'], ['新加坡']]
+city = SecondOption[0] + SecondOption[1] + SecondOption[2] + SecondOption[3] + SecondOption[4]
+CityOption = StringVar()
+CityOption.set('請選擇城市')
+
+CityDrop = OptionMenu(mainWin, CityOption, *city, command = cityCommand)
+CountryDrop = OptionMenu(mainWin, CountryOption, *country, command = countryCommand)
+
+CountryDrop.grid(row=1,column=2)
+CityDrop.grid(row=1,column=4)
+
+mainWin.mainloop()
